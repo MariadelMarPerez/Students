@@ -1,14 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package vista;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class VistaStudent extends  JPanel {
+public class VistaStudent extends JPanel {
 
     public JTextField txtCodigo, txtNombre;
     public JButton btnAgregar, btnActualizar, btnEliminar, btnLimpiar;
@@ -23,7 +19,6 @@ public class VistaStudent extends  JPanel {
 
         JPanel panelFormulario = new JPanel(new GridLayout(2, 2, 5, 5));
         panelFormulario.setBorder(BorderFactory.createTitledBorder("Datos del Estudiante"));
-
 
         panelFormulario.add(new JLabel("Código:"));
         txtCodigo = new JTextField();
@@ -61,6 +56,4 @@ public class VistaStudent extends  JPanel {
         JScrollPane scroll = new JScrollPane(tabla);
         add(scroll, BorderLayout.CENTER);
     }
-
 }
-    

@@ -1,6 +1,5 @@
-
 package controlador;
- 
+
 import modelo.ModeloStudent;
 import javax.swing.*;
 import java.awt.event.*;
@@ -11,14 +10,13 @@ public class ControladorStudent {
     
     private final VistaStudent vista;
 
-
-    public ControladorStudent (VistaStudent vista) {
+    public ControladorStudent(VistaStudent vista) {
         this.vista = vista;
-        initControladores();
-        cargarTabla();
+        configurarEventos();
+        refrescarTabla();
     }
 
-    private void initControladores() {
+    private void configurarEventos() {
         vista.tabla.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -33,53 +31,51 @@ public class ControladorStudent {
             }
         });
 
-        vista.btnAgregar.addActionListener(e -> insertar());
-        vista.btnActualizar.addActionListener(e -> actualizar());
-        vista.btnEliminar.addActionListener(e -> eliminar());
-        vista.btnLimpiar.addActionListener(e -> limpiar());
-
-        
+        vista.btnAgregar.addActionListener(e -> registrarEstudiante());
+        vista.btnActualizar.addActionListener(e -> editarEstudiante());
+        vista.btnEliminar.addActionListener(e -> borrarEstudiante());
+        vista.btnLimpiar.addActionListener(e -> limpiarFormulario());
     }
 
-    private void insertar() {
-        ModeloStudent e = new ModeloStudent(
+    private void registrarEstudiante() {
+        ModeloStudent estudiante = new ModeloStudent(
                 Integer.parseInt(vista.txtCodigo.getText()),
                 vista.txtNombre.getText()
         );
-        if (e.insertar()) {
-            cargarTabla();
-            limpiar();
+        if (estudiante.guardarEstudiante()) {
+            refrescarTabla();
+            limpiarFormulario();
         }
     }
 
-    private void actualizar() {
-        ModeloStudent e = new ModeloStudent(
+    private void editarEstudiante() {
+        ModeloStudent estudiante = new ModeloStudent(
                 Integer.parseInt(vista.txtCodigo.getText()),
                 vista.txtNombre.getText()
         );
-        if (e.actualizar()) {
-            cargarTabla();
-            limpiar();
+        if (estudiante.modificarEstudiante()) {
+            refrescarTabla();
+            limpiarFormulario();
         }
     }
 
-    private void eliminar() {
+    private void borrarEstudiante() {
         int cod = Integer.parseInt(vista.txtCodigo.getText());
-        ModeloStudent e = new ModeloStudent (cod, null);
-        if (e.eliminar()) {
-            cargarTabla();
-            limpiar();
+        ModeloStudent estudiante = new ModeloStudent(cod, null);
+        if (estudiante.removerEstudiante()) {
+            refrescarTabla();
+            limpiarFormulario();
         }
     }
 
-    private void limpiar() {
+    private void limpiarFormulario() {
         vista.txtCodigo.setText("");
         vista.txtNombre.setText("");
         vista.tabla.clearSelection();
     }
 
-    private void cargarTabla() {
-        List<ModeloStudent> lista = ModeloStudent.obtenerTodos();
+    private void refrescarTabla() {
+        List<ModeloStudent> lista = ModeloStudent.listarEstudiantes();
         vista.modeloTabla.setRowCount(0);
         for (ModeloStudent e : lista) {
             vista.modeloTabla.addRow(new Object[]{e.getCodigo(), e.getNombre()});
