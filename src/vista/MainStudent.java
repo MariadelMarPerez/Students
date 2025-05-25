@@ -1,13 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package vista;
 
-/**
- *
- * @author Rosa
- */
+import java.sql.Connection;
+import modelo.ConexionDataBase;
+
+
 public class MainStudent {
     
+    public static void main(String[] args) {
+        
+        ConexionDataBase.getConnection();
+       
+}
+
 }
