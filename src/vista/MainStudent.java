@@ -1,6 +1,7 @@
 package vista;
 
 import controlador.ControladorStudent;
+import controlador.ControladorTeacher;
 import modelo.ConexionDataBase;
 
 import javax.swing.*;
@@ -54,6 +55,16 @@ public class MainStudent {
                     panelPrincipal.revalidate();
                     panelPrincipal.repaint();
             });
+            
+            itemDocentes.addActionListener(e -> {
+            VistaTeacher vistaTeacher = new VistaTeacher();
+            new ControladorTeacher(vistaTeacher);
+
+                    panelPrincipal.removeAll();
+                    panelPrincipal.add(vistaTeacher, BorderLayout.CENTER);
+                    panelPrincipal.revalidate();
+                    panelPrincipal.repaint();
+});
              // Mostrar ventana
             frame.setVisible(true);
         });
