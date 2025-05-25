@@ -1,123 +1,73 @@
-
 package modelo;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModeloStudent {
-    private int id;
-    private String nombre;
-    private int edad;
-    
+
+public class ModeloStudent extends ModeloPerson {
 
     public ModeloStudent() {}
-    
-    public int getId() {
-        return id;
+
+    public ModeloStudent(int codigo, String nombre) {
+        super(codigo, nombre);
     }
 
-    public void setId(int id) {
-        this.id = id;
+    @Override
+    public String getTipo() {
+        return "Estudiante";
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public int getEdad() {
-        return edad;
-    }
-
-    public void setEdad(int edad) {
-        this.edad = edad;
-    }
-
-    public static void insertarEstudiante(Estudiante estudiante) {
-         Connection conexion = ConexionDataBase.getConnection();
-        String sql = "INSERT INTO estudiante (nombre, edad) VALUES (?, ?)";
-
-        //String sql = "CALL insertar_estudiante(?, ?)";
-
-        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
-            statement.setString(1, estudiante.getNombre());
-            statement.setInt(2, estudiante.getEdad());
-
-            // INSERT, UPDATE, DELETE
-            statement.executeUpdate();
-
-            // SELECT
-            // statement.executeQuery();
-        } catch (Exception error) {
-            error.printStackTrace();
-        }
-    }
-
-    public static List<Estudiante> obtenerTodosLosEstudiantes() {
-        List<Estudiante> listaEstudiantes = new ArrayList<>();
-        String sql = "SELECT id, nombre, edad FROM estudiante";
-        //String sql = "SELECT id, nombre, edad FROM get_estudiantes";
-
+   public boolean insertar() {
+        String sql = "{CALL insertar_estudiante(?,?)}"; // Proceso Almacenado
         try {
-            Connection conexion = ConexionDataBase.getConnection();
-            Statement stmt = conexion.createStatement();
-            ResultSet resultado = stmt.executeQuery(sql);
+            CallableStatement cs = ConexionDataBase.getConnection().prepareCall(sql);
+            cs.setInt(1, getCodigo());
+            cs.setString(2, getNombre());
+            cs.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error al insertar estudiante: " + e.getMessage());
+            return false;
+        }
+    }
 
-            while (resultado.next()) {
-                Estudiante estudiante = new Estudiante();
-                estudiante.setId(resultado.getInt("id"));
-                estudiante.setNombre(resultado.getString("nombre"));
-                estudiante.setEdad(resultado.getInt("edad"));
+    public boolean actualizar() {
+        String sql = "UPDATE estudiantes SET nom_estudiante = ? WHERE cod_estudiante = ?";
+        try (PreparedStatement ps = ConexionDataBase.getConnection().prepareStatement(sql)) {
+            ps.setString(1, getNombre());
+            ps.setInt(2, getCodigo());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar estudiante: " + e.getMessage());
+            return false;
+        }
+    }
 
-                listaEstudiantes.add(estudiante);
+    public boolean eliminar() {
+        String sql = "DELETE FROM estudiantes WHERE cod_estudiante = ?";
+        try (PreparedStatement ps = ConexionDataBase.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, getCodigo());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar estudiante: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static List<ModeloStudent> obtenerTodos() {
+        List<ModeloStudent> lista = new ArrayList<>();
+        String sql = "SELECT * FROM estudiantes";
+        try (Statement st = ConexionDataBase.getConnection().createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                lista.add(new ModeloStudent(rs.getInt("cod_estudiante"), rs.getString("nom_estudiante")));
             }
-
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Error al obtener estudiantes: " + e.getMessage());
         }
-
-        return listaEstudiantes;
+        return lista;
     }
-
-    public static void deleteEstudiante(int idEstudiante) {
-        Connection conexion = ConexionDataBase.getConnection();
-        String sql = "DELETE FROM estudiante WHERE id = ?";
-
-        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
-            statement.setInt(1, idEstudiante);
-
-            // INSERT, UPDATE, DELETE
-            statement.executeUpdate();
-
-        } catch (Exception error) {
-            error.printStackTrace();
-        }
-    }
-
-    public static void updateEstudiante(Estudiante estudiante) {
-       Connection conexion = ConexionDataBase.getConnection();
-        String sql = "UPDATE estudiante SET nombre = ?, edad = ? WHERE id = ?";
-
-        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
-            statement.setString(1, estudiante.getNombre());
-            statement.setInt(2, estudiante.getEdad());
-            statement.setInt(3, estudiante.getId());
-
-            // INSERT, UPDATE, DELETE
-            statement.executeUpdate();
-
-        } catch (Exception error) {
-            error.printStackTrace();
-        }
-    }
-
 }
-
-

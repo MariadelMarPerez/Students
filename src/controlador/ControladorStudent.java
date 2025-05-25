@@ -38,13 +38,7 @@ public class ControladorStudent {
         vista.btnEliminar.addActionListener(e -> eliminar());
         vista.btnLimpiar.addActionListener(e -> limpiar());
 
-        vista.tabla.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                int fila = vista.tabla.getSelectedRow();
-                vista.txtCodigo.setText(vista.modeloTabla.getValueAt(fila, 0).toString());
-                vista.txtNombre.setText(vista.modeloTabla.getValueAt(fila, 1).toString());
-            }
-        });
+        
     }
 
     private void insertar() {
