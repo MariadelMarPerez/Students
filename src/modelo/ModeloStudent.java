@@ -4,7 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ModeloStudent extends ModeloPerson {
 
     public ModeloStudent() {}
@@ -18,8 +17,8 @@ public class ModeloStudent extends ModeloPerson {
         return "Estudiante";
     }
 
-   public boolean insertar() {
-        String sql = "{CALL insertar_estudiante(?,?)}"; // Proceso Almacenado
+    public boolean guardarEstudiante() {
+        String sql = "{CALL insertar_estudiante(?,?)}";
         try {
             CallableStatement cs = ConexionDataBase.getConnection().prepareCall(sql);
             cs.setInt(1, getCodigo());
@@ -27,12 +26,12 @@ public class ModeloStudent extends ModeloPerson {
             cs.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("Error al insertar estudiante: " + e.getMessage());
+            System.out.println("Error al guardar estudiante: " + e.getMessage());
             return false;
         }
     }
 
-    public boolean actualizar() {
+    public boolean modificarEstudiante() {
         String sql = "UPDATE estudiantes SET nom_estudiante = ? WHERE cod_estudiante = ?";
         try (PreparedStatement ps = ConexionDataBase.getConnection().prepareStatement(sql)) {
             ps.setString(1, getNombre());
@@ -40,24 +39,24 @@ public class ModeloStudent extends ModeloPerson {
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.err.println("Error al actualizar estudiante: " + e.getMessage());
+            System.err.println("Error al modificar estudiante: " + e.getMessage());
             return false;
         }
     }
 
-    public boolean eliminar() {
+    public boolean removerEstudiante() {
         String sql = "DELETE FROM estudiantes WHERE cod_estudiante = ?";
         try (PreparedStatement ps = ConexionDataBase.getConnection().prepareStatement(sql)) {
             ps.setInt(1, getCodigo());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("Error al eliminar estudiante: " + e.getMessage());
+            System.out.println("Error al remover estudiante: " + e.getMessage());
             return false;
         }
     }
 
-    public static List<ModeloStudent> obtenerTodos() {
+    public static List<ModeloStudent> listarEstudiantes() {
         List<ModeloStudent> lista = new ArrayList<>();
         String sql = "SELECT * FROM estudiantes";
         try (Statement st = ConexionDataBase.getConnection().createStatement();
@@ -66,7 +65,7 @@ public class ModeloStudent extends ModeloPerson {
                 lista.add(new ModeloStudent(rs.getInt("cod_estudiante"), rs.getString("nom_estudiante")));
             }
         } catch (SQLException e) {
-            System.out.println("Error al obtener estudiantes: " + e.getMessage());
+            System.out.println("Error al listar estudiantes: " + e.getMessage());
         }
         return lista;
     }
