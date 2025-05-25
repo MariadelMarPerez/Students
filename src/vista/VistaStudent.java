@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class VistaStudent extends  JPanel {
 
-    public JTextField txtCodigo, txtNombre,txtEdad;
+    public JTextField txtCodigo, txtNombre;
     public JButton btnAgregar, btnActualizar, btnEliminar, btnLimpiar;
     public JTable tabla;
     public DefaultTableModel modeloTabla;
@@ -32,10 +32,6 @@ public class VistaStudent extends  JPanel {
         panelFormulario.add(new JLabel("Nombre:"));
         txtNombre = new JTextField();
         panelFormulario.add(txtNombre);
-
-        panelFormulario.add(new JLabel("Edad:"));
-        txtEdad = new JTextField();
-        panelFormulario.add(txtEdad);
 
         panelSuperior.add(panelFormulario, BorderLayout.NORTH);
 
