@@ -3,11 +3,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controlador;
+  import modelo.ModeloReport;
+import vista.VistaReport;
 
-/**
- *
- * @author Rosa
- */
+import java.util.List;
+
+
 public class ControladorReport {
-    
+
+    private final VistaReport vista;
+
+    public ControladorReport(VistaReport vista) {
+        this.vista = vista;
+        cargarInformacionNotas();
+    }
+
+    private void cargarInformacionNotas() {
+        List<String[]> datos = ModeloReport.consultarNotas();
+        vista.modeloTabla.setRowCount(0);
+        for (String[] fila : datos) {
+            vista.modeloTabla.addRow(fila);
+    }
 }
+}
+
+
