@@ -1,27 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package vista;
-
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-     
-public class VistaTeacher extends  JPanel {
+public class VistaTeacher extends JPanel {
 
     public JTextField txtCodigo, txtNombre;
     public JButton btnAgregar, btnActualizar, btnEliminar, btnLimpiar;
@@ -29,26 +12,39 @@ public class VistaTeacher extends  JPanel {
     public DefaultTableModel modeloTabla;
 
     public VistaTeacher() {
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(10, 10));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        // Panel superior contenedor
         JPanel panelSuperior = new JPanel();
-        panelSuperior.setLayout(new BorderLayout());
+        panelSuperior.setLayout(new BoxLayout(panelSuperior, BoxLayout.Y_AXIS));
+        panelSuperior.setBorder(BorderFactory.createTitledBorder("Gestión de Docentes"));
 
-        JPanel panelFormulario = new JPanel(new GridLayout(2, 2, 5, 5));
-        panelFormulario.setBorder(BorderFactory.createTitledBorder("Datos del Docente"));
+        // Panel del formulario con GridBagLayout
+        JPanel panelFormulario = new JPanel(new GridBagLayout());
+        panelFormulario.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        gbc.gridx = 0; gbc.gridy = 0;
+        panelFormulario.add(new JLabel("Código:"), gbc);
+        gbc.gridx = 1;
+        txtCodigo = new JTextField(15);
+        panelFormulario.add(txtCodigo, gbc);
 
-        panelFormulario.add(new JLabel("Código:"));
-        txtCodigo = new JTextField();
-        panelFormulario.add(txtCodigo);
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelFormulario.add(new JLabel("Nombre:"), gbc);
+        gbc.gridx = 1;
+        txtNombre = new JTextField(15);
+        panelFormulario.add(txtNombre, gbc);
 
-        panelFormulario.add(new JLabel("Nombre:"));
-        txtNombre = new JTextField();
-        panelFormulario.add(txtNombre);
+        panelSuperior.add(panelFormulario);
 
-        panelSuperior.add(panelFormulario, BorderLayout.NORTH);
+        // Panel de botones con diseño más estético
+        JPanel panelBotones = new JPanel(new GridLayout(1, 4, 10, 0));
+        panelBotones.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
         btnAgregar = new JButton("Agregar");
         btnActualizar = new JButton("Actualizar");
         btnEliminar = new JButton("Eliminar");
@@ -59,10 +55,12 @@ public class VistaTeacher extends  JPanel {
         panelBotones.add(btnEliminar);
         panelBotones.add(btnLimpiar);
 
-        panelSuperior.add(panelBotones, BorderLayout.SOUTH);
+        panelSuperior.add(panelBotones);
 
+        // Añadir parte superior al panel principal
         add(panelSuperior, BorderLayout.NORTH);
 
+        // Tabla de docentes
         modeloTabla = new DefaultTableModel(new String[]{"Código", "Nombre"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -71,10 +69,10 @@ public class VistaTeacher extends  JPanel {
         };
 
         tabla = new JTable(modeloTabla);
+        tabla.setFillsViewportHeight(true);
         JScrollPane scroll = new JScrollPane(tabla);
+        scroll.setBorder(BorderFactory.createTitledBorder("Lista de Docentes"));
+
         add(scroll, BorderLayout.CENTER);
     }
-
 }
-    
-

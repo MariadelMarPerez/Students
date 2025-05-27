@@ -12,25 +12,38 @@ public class VistaStudent extends JPanel {
     public DefaultTableModel modeloTabla;
 
     public VistaStudent() {
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(10, 10));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        // Panel principal superior
         JPanel panelSuperior = new JPanel();
-        panelSuperior.setLayout(new BorderLayout());
+        panelSuperior.setLayout(new BoxLayout(panelSuperior, BoxLayout.Y_AXIS));
+        panelSuperior.setBorder(BorderFactory.createTitledBorder("Gestión de Estudiantes"));
 
-        JPanel panelFormulario = new JPanel(new GridLayout(2, 2, 5, 5));
-        panelFormulario.setBorder(BorderFactory.createTitledBorder("Datos del Estudiante"));
+        // Panel del formulario
+        JPanel panelFormulario = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        panelFormulario.add(new JLabel("Código:"));
-        txtCodigo = new JTextField();
-        panelFormulario.add(txtCodigo);
+        gbc.gridx = 0; gbc.gridy = 0;
+        panelFormulario.add(new JLabel("Código:"), gbc);
+        gbc.gridx = 1;
+        txtCodigo = new JTextField(15);
+        panelFormulario.add(txtCodigo, gbc);
 
-        panelFormulario.add(new JLabel("Nombre:"));
-        txtNombre = new JTextField();
-        panelFormulario.add(txtNombre);
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelFormulario.add(new JLabel("Nombre:"), gbc);
+        gbc.gridx = 1;
+        txtNombre = new JTextField(15);
+        panelFormulario.add(txtNombre, gbc);
 
-        panelSuperior.add(panelFormulario, BorderLayout.NORTH);
+        panelSuperior.add(panelFormulario);
 
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        // Panel de botones
+        JPanel panelBotones = new JPanel(new GridLayout(1, 4, 10, 0));
+        panelBotones.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+
         btnAgregar = new JButton("Agregar");
         btnActualizar = new JButton("Actualizar");
         btnEliminar = new JButton("Eliminar");
@@ -41,10 +54,11 @@ public class VistaStudent extends JPanel {
         panelBotones.add(btnEliminar);
         panelBotones.add(btnLimpiar);
 
-        panelSuperior.add(panelBotones, BorderLayout.SOUTH);
+        panelSuperior.add(panelBotones);
 
         add(panelSuperior, BorderLayout.NORTH);
 
+        // Tabla de estudiantes
         modeloTabla = new DefaultTableModel(new String[]{"Código", "Nombre"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -53,7 +67,10 @@ public class VistaStudent extends JPanel {
         };
 
         tabla = new JTable(modeloTabla);
+        tabla.setFillsViewportHeight(true);
         JScrollPane scroll = new JScrollPane(tabla);
+        scroll.setBorder(BorderFactory.createTitledBorder("Lista de Estudiantes"));
+
         add(scroll, BorderLayout.CENTER);
     }
 }
